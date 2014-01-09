@@ -1,0 +1,33 @@
+# This is a fork of gpg-mailgate (https://code.google.com/p/gpg-mailgate/)
+# This software is licensed under the GNU GPLv3 license: https://www.gnu.org/licenses/gpl.html
+# January 9th 2014
+
+1) Ensure that GPG and Postfix are installed and configured.
+2) Add a new user to your system:
+# pw useradd gpgmap -d /var/gpg -g "" -m -M 0600 -s /bin/sh
+3) Retrieve your public keys using this command or by hand:
+# su gpgmap
+$ /usr/local/bin/gpg --homedir /var/gpg/.gnupg --keyserver hkp://keys.indymedia.org --search admin@example.org
+4) Configure /usr/local/etc/gpg-mailgate.conf based on the provided sample config
+5) Place gpg-mailgate.py in /usr/local/bin/
+6) Place the GnuPG directory in /usr/local/lib/python2.7/
+7) Append the following to /usr/local/etc/postfix/master.cf
+
+gpg-mailgate	unix	-	n	n	-	-	pipe
+	flags= user=gpgmap argv=/usr/local/bin/gpg-mailgate.py
+
+127.0.0.1:10028	inet	n	-	n	-	10	smtpd
+	-o content_filter=
+	-o receive_override_options=no_unknown_recipient_checks,no_header_body_checks
+	-o smtpd_helo_restrictions=
+	-o smtpd_client_restrictions=
+	-o smtpd_sender_restrictions=
+	-o smtpd_recipient_restrictions=permit_mynetworks,reject
+	-o mynetworks=127.0.0.0/8
+	-o smtpd_authorized_xforward_hosts=127.0.0.0/8
+
+8) Add the content filter to /usr/local/etc/postfix/main.cf:
+
+# echo 'content_filter = gpg-mailgate' >> /usr/local/etc/postfix/main.cf
+
+9) Restart postfix.

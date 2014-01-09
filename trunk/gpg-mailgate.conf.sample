@@ -1,0 +1,34 @@
+[default]
+add_header = yes
+domains = example.org,example.com
+
+[gpg]
+keyhome = /var/gpg/.gnupg
+
+[logging]
+file = /tmp/gpg-mailgate.log
+
+[relay]
+host = smtp.example.org
+port = 587
+user = user@example.org
+password = foobar
+
+[aliases]
+# since system aliases don't work with content filters in postfix (I wasn't able to configure them anyway),
+# place your aliases here in the form:
+# user@example.org = user2@example.com
+# In this case, mails to user@example.org will be sent to user2@example.com
+
+root@localhost = user@example.com
+
+[keymap]
+# You can find these by running the following command:
+#	gpg --list-keys --keyid-format long user@example.com
+# Which will return output similar to:
+#	pub   1024D/AAAAAAAAAAAAAAAA 2007-10-22
+#	uid                          Joe User <user@example.com>
+#	sub   2048g/BBBBBBBBBBBBBBBB 2007-10-22
+# You want the AAAAAAAAAAAAAAAA not BBBBBBBBBBBBBBBB.
+#user@example.com =	<gpg key id>
+
