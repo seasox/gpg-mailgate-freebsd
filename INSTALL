@@ -5,6 +5,8 @@
 1) Ensure that GPG and Postfix are installed and configured.
 2) Add a new user to your system:
 # pw useradd gpgmap -d /var/gpg -m -M 0600 -s /bin/sh
+2.1) Mark the home directory executable:
+# chmod +x /var/gpg
 3) Retrieve your public keys using this command or by hand:
 # su gpgmap
 $ /usr/local/bin/gpg --homedir /var/gpg/.gnupg --keyserver hkp://keys.indymedia.org --search admin@example.org
