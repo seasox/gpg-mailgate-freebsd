@@ -4,7 +4,7 @@
 
 1) Ensure that GPG and Postfix are installed and configured.
 2) Add a new user to your system:
-# pw useradd gpgmap -d /var/gpg -g "" -m -M 0600 -s /bin/sh
+# pw useradd gpgmap -d /var/gpg -m -M 0600 -s /bin/sh
 3) Retrieve your public keys using this command or by hand:
 # su gpgmap
 $ /usr/local/bin/gpg --homedir /var/gpg/.gnupg --keyserver hkp://keys.indymedia.org --search admin@example.org
@@ -30,4 +30,13 @@ gpg-mailgate	unix	-	n	n	-	-	pipe
 
 # echo 'content_filter = gpg-mailgate' >> /usr/local/etc/postfix/main.cf
 
-9) Restart postfix.
+9) Make sure that /usr/local/bin/python exists and links to the appropriate python executable, i.e.:
+# ln -s /usr/local/bin/python27 /usr/local/bin/python
+
+10) Make sure that /usr/local/bin/gpg-mailgate.py is marked executable:
+# chmod +x /usr/local/bin/gpg-mailgate.py
+
+11) Restart postfix.
+
+Appendix:
+12) Check if everything works fine by investigating vour /var/log/maillog for errors. Report these errors if any occur.
