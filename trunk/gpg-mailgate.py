@@ -40,7 +40,8 @@ def send_msg( message, recipients = None ):
 		log.close()
 	relay = (cfg['relay']['host'], int(cfg['relay']['port']))
 	smtp = smtplib.SMTP(relay[0], relay[1])
-	smtp.starttls()
+	if cfg.has_key('relay') and cfg['relay']['tls'] == 'yes':
+		smtp.starttls()
 	smtp.ehlo()
 	smtp.login(cfg['relay']['user'], cfg['relay']['password'])
 	smtp.sendmail( from_addr, recipients, message.as_string() )

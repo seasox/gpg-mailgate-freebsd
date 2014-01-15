@@ -13,6 +13,7 @@ host = smtp.example.org
 port = 587
 user = user@example.org
 password = foobar
+tls = yes
 
 [aliases]
 # since system aliases don't work with content filters in postfix (I wasn't able to configure them anyway),
